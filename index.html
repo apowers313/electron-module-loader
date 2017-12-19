@@ -22,17 +22,34 @@
 </body>
 <script>
 var remote = require('electron').remote;
+const {ipcRenderer} = require('electron');
 var logger = remote.getGlobal("sharedObj").logger;
 logger("logger running");
 var loader = remote.getGlobal("sharedObj").loader;
 
+// wait for user to drop a .tgz on us
 document.addEventListener('drop', function(e) {
     e.preventDefault();
     e.stopPropagation();
 
     for (let f of e.dataTransfer.files) {
         console.log('File(s) you dragged here: ', f.path);
-        loader(f.path);
+        // load the .tgz
+        loader(f.path, function(err) {
+            if (err) throw err;
+            console.log ("Done loading!");
+
+            // the npm .tgz is loaded, let's try to send a message
+            var msg = {
+                beer: "yum"
+            };
+            // this is synchronous
+            // asynchonous also exists: https://electronjs.org/docs/api/ipc-main
+            console.log ("Sending message");
+            var ret = ipcRenderer.sendSync("send-msg", msg);
+            console.log ("Message sent");
+            console.log ("Return message", ret);
+        });
     }
 });
 document.addEventListener('dragover', function(e) {

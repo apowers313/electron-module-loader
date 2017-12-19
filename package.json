@@ -27,7 +27,7 @@
   "dependencies": {
     "electron-debug": "^1.0.0",
     "npm": "^5.6.0",
-    "test-package": "file:test-package/test-package-1.0.0.tgz"
+    "test-package": "file:test-package/test-package-1.1.10.tgz"
   },
   "devDependencies": {
     "devtron": "^1.1.0",
