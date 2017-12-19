@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Adam's App</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>This is Adam's App</h1>
+            drag a npm tgz file here to load it<br>
+            see 'npm pack' to create a npm tgz
+        </header>
+        <section class="main">
+        </section>
+        <footer>
+        </footer>
+    </div>
+</body>
+<script>
+var remote = require('electron').remote;
+var logger = remote.getGlobal("sharedObj").logger;
+logger("logger running");
+var loader = remote.getGlobal("sharedObj").loader;
+
+document.addEventListener('drop', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    for (let f of e.dataTransfer.files) {
+        console.log('File(s) you dragged here: ', f.path);
+        loader(f.path);
+    }
+});
+document.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+});
+</script>
+
+</html>
